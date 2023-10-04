@@ -33,6 +33,11 @@ public static class InputManager
             myPlayer.EndObject();
         };
 
+        controles.Game.Look.performed += ctb =>
+        {
+            myPlayer.SetLookDirection(ctb.ReadValue<Vector2>());
+        };
+
 
         controles.Permanent.Enable();
     }

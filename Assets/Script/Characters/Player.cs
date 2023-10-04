@@ -16,6 +16,21 @@ public class Player : MonoBehaviour
     private float depth;
     [SerializeField] private GameObject sphere;
     [SerializeField] private GameObject floor;
+    [SerializeField] private GameObject coin;
+
+    [SerializeField, Range(1, 20)] private float mouseSensX;
+    [SerializeField, Range(1, 20)] private float mouseSensY;
+
+    [SerializeField, Range(1, 20)] private float minViewAngle;
+    [SerializeField, Range(1, 20)] private float maxViewAngle;
+
+    [SerializeField] private Transform lookAtPoint;
+
+    [SerializeField]
+
+    private Vector2 currentRotation;
+
+    int score;
 
 
 
@@ -69,4 +84,23 @@ public class Player : MonoBehaviour
         isGrounded = Physics.Raycast(transform.position, Vector3.down, depth, groundLayer);
         Debug.DrawRay(transform.position, Vector3.down * depth, Color.green, 0, false);
     }
+
+    public void SetLookDirection(Vector2 readValue )
+    {
+        currentRotation.x += readValue.x * Time.deltaTime * mouseSensX;
+        currentRotation.x += readValue.y * Time.deltaTime * mouseSensY;
+
+        transform.rotation = Quaternion.AngleAxis(currentRotation.x, Vector3.up);
+        lookAtPoint.localRotation = Quaternion.AngleAxis(currentRotation.y Vector3.right);
+
+        float clamp = mathf.Clamp(currentRotation.y, minViewAngle, maxViewAngle);
+        lookAtPoint.localRotation = Quaternion.AngleAxis(currentRotation.y, Vector2.right);
+    }
+    
+    public void Shoot()
+    {
+        Rigidbody currentProjectile = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        currentProjectile
+    }
+    
 }

@@ -80,6 +80,15 @@ public partial class @Controles: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""69fdbe71-4d87-4029-901d-eec2635da077"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -174,7 +183,7 @@ public partial class @Controles: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""630086b4-2402-4c86-be47-b07d12448ee3"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -247,6 +256,28 @@ public partial class @Controles: IInputActionCollection2, IDisposable
                     ""action"": ""Destroy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ffe683d7-ea17-4a31-a160-6f38860dd5d2"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9556a0c7-eda4-4b20-9e71-4064af0b5b2c"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -317,6 +348,7 @@ public partial class @Controles: IInputActionCollection2, IDisposable
         m_Game_Spawn = m_Game.FindAction("Spawn", throwIfNotFound: true);
         m_Game_Jump = m_Game.FindAction("Jump", throwIfNotFound: true);
         m_Game_Destroy = m_Game.FindAction("Destroy", throwIfNotFound: true);
+        m_Game_Look = m_Game.FindAction("Look", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -390,6 +422,7 @@ public partial class @Controles: IInputActionCollection2, IDisposable
     private readonly InputAction m_Game_Spawn;
     private readonly InputAction m_Game_Jump;
     private readonly InputAction m_Game_Destroy;
+    private readonly InputAction m_Game_Look;
     public struct GameActions
     {
         private @Controles m_Wrapper;
@@ -400,6 +433,7 @@ public partial class @Controles: IInputActionCollection2, IDisposable
         public InputAction @Spawn => m_Wrapper.m_Game_Spawn;
         public InputAction @Jump => m_Wrapper.m_Game_Jump;
         public InputAction @Destroy => m_Wrapper.m_Game_Destroy;
+        public InputAction @Look => m_Wrapper.m_Game_Look;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -427,6 +461,9 @@ public partial class @Controles: IInputActionCollection2, IDisposable
             @Destroy.started += instance.OnDestroy;
             @Destroy.performed += instance.OnDestroy;
             @Destroy.canceled += instance.OnDestroy;
+            @Look.started += instance.OnLook;
+            @Look.performed += instance.OnLook;
+            @Look.canceled += instance.OnLook;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -449,6 +486,9 @@ public partial class @Controles: IInputActionCollection2, IDisposable
             @Destroy.started -= instance.OnDestroy;
             @Destroy.performed -= instance.OnDestroy;
             @Destroy.canceled -= instance.OnDestroy;
+            @Look.started -= instance.OnLook;
+            @Look.performed -= instance.OnLook;
+            @Look.canceled -= instance.OnLook;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -566,6 +606,7 @@ public partial class @Controles: IInputActionCollection2, IDisposable
         void OnSpawn(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnDestroy(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
